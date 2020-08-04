@@ -32,6 +32,7 @@ def main():
             board[(x - x_offset, y - y_offset)] = curr_line[x]
 
     solved_board = solve(board)
+    #exit()
     count = 0
     while solved_board == False:
         solved_board = solve(board)
@@ -71,7 +72,7 @@ def print_board(board, file):
                         l_offset += 1
                         line += "|"
                         continue
-                    line += board[(p - p_offset, l - l_offset)]
+                    line += board[(l - l_offset, p - p_offset)]
                 print(line)
 
     if file != None:
@@ -91,7 +92,7 @@ def print_board(board, file):
                         l_offset += 1
                         line += "|"
                         continue
-                    line += board[(p - p_offset, l - l_offset)]
+                    line += board[(l - l_offset, p - p_offset)]
                 file.write(line + '\n')
 
 

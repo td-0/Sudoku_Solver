@@ -11,28 +11,72 @@ def solve(board):
 
     new_board = board
     while len(unassigned) != 0:
-        choice = random.choice(tuple(unassigned))
+        choice = fullest_domain(board, unassigned)
+        #print_board(new_board)
         new_board = find_value(new_board, choice)
         if new_board == False:
+            #print_board(board)
             return False
         unassigned.discard(choice)
 
     return new_board
 
 
+# TEMPORARY
+def print_board(board):
+    caps = "-------------"
+    dividers = "|-----------|"
+
+    p_offset = 0
+    for p in range(13):
+        if p == 0 or p == 12:
+            p_offset += 1
+            print(caps)
+        elif p % 4 == 0:
+            p_offset += 1
+            print(dividers)
+        else:
+            line = ""
+            l_offset = 0
+            for l in range(13):
+                if l == 0 or l % 4 == 0:
+                    l_offset += 1
+                    line += "|"
+                    continue
+                line += board[(l - l_offset, p - p_offset)]
+            print(line)
+
+
 def find_value(board, coords):
     dom = domain(board, coords)
+    possible = []
     for attempt in range(1, 10):
         if conflicts(str(attempt), dom) == False:
-            break
+            possible.append(attempt)
 
-    if attempt == 9:
+    if len(possible) == 0:
         return False
 
+    chosen = possible[random.randint(0, len(possible) - 1)]
     new_board = copy.deepcopy(board)
-    new_board[coords] = str(attempt)
+    new_board[coords] = str(chosen)
 
     return new_board
+
+
+def fullest_domain(board, unassigned):
+    # Returns unassigned coordinate with the most spaces in its domain filled
+    # Largest Domain Size = Fullest Domain
+    fullest = None
+    largest_size = 0
+    for coord in unassigned:
+        dom = domain(board, coord)
+        size = len(dom[0]) + len(dom[1]) + len(dom[2])
+        if size > largest_size:
+            largest_size = size
+            fullest = coord
+
+    return fullest
 
 
 def domain(board, coords):
