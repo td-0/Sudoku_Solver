@@ -26,25 +26,23 @@ def main():
         curr_line = input_file.readline()
         x_offset = 0
         for x in range(len(curr_line) - 1):
+            if x > 0 and x % 2 != 0:
+                x_offset += 1
+                continue
             if curr_line[x] == '|':
                 x_offset += 1
                 continue
             board[(x - x_offset, y - y_offset)] = curr_line[x]
 
-    solved_board = solve(board)
-    #exit()
-    count = 0
-    while solved_board == False:
-        solved_board = solve(board)
-        count += 1
-        print(count)
+    is_solved = solve(board)
 
-    if has_output:
-        print_board(solved_board, output_file)
+    if is_solved == False:
+        print("The Given Sudoku Puzzle Is Unsolvable")
     else:
-        print_board(solved_board, None)
-
-
+        if has_output:
+            print_board(board, output_file)
+        else:
+            print_board(board, None)
 
     input_file.close()
     if has_output:
@@ -52,8 +50,8 @@ def main():
 
 
 def print_board(board, file):
-    caps = "-------------"
-    dividers = "|-----------|"
+    caps = "-------------------------"
+    dividers = "|-----------------------|"
 
     if file == None:
         p_offset = 0
@@ -70,9 +68,10 @@ def print_board(board, file):
                 for l in range(13):
                     if l == 0 or l % 4 == 0:
                         l_offset += 1
-                        line += "|"
+                        line += "| "
                         continue
                     line += board[(l - l_offset, p - p_offset)]
+                    line += ' '
                 print(line)
 
     if file != None:
@@ -90,9 +89,10 @@ def print_board(board, file):
                 for l in range(13):
                     if l == 0 or l % 4 == 0:
                         l_offset += 1
-                        line += "|"
+                        line += "| "
                         continue
                     line += board[(l - l_offset, p - p_offset)]
+                    line += ' '
                 file.write(line + '\n')
 
 
