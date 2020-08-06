@@ -1,9 +1,11 @@
 # A Sudoku Solving Program
 
 import sys
+import time
 from computation import solve
 
 def main():
+    start_time = time.time()
     if len(sys.argv) < 2 or len(sys.argv) > 3:
         print("ERROR: Invalid Number of Arguments")
         sys.exit()
@@ -43,6 +45,7 @@ def main():
             print_board(board, output_file)
         else:
             print_board(board, None)
+        print("\nSolved in: " + str(time.time() - start_time) + " seconds\n")
 
     input_file.close()
     if has_output:
